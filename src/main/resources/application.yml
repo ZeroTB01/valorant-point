@@ -1,0 +1,157 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: valorant-backend
+
+
+    # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/valorant_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: escape546
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  # Redis配置
+  data:
+     redis:
+       host: localhost
+       port: 6379
+       password:
+       database: 0
+       timeout: 10000ms
+       lettuce:
+         pool:
+           max-active: 8
+           max-wait: -1ms
+           max-idle: 8
+           min-idle: 0
+
+  # 邮件配置（稍后配置真实邮箱信息）
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 3062525498@qq.com
+    password: hxbkrcvaergwdecc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  # 实体类包路径
+  type-aliases-package: com.escape.entity
+  # Mapper XML 文件路径（如果使用 XML）
+  mapper-locations: classpath*:mapper/**/*.xml
+  # 全局配置
+  global-config:
+    # 数据库配置
+    db-config:
+      # 主键类型（AUTO 为数据库自增）
+      id-type: AUTO
+      # 逻辑删除字段
+      logic-delete-field: deleted
+      # 逻辑删除值
+      logic-delete-value: 1
+      # 逻辑未删除值
+      logic-not-delete-value: 0
+      # 字段验证策略
+      insert-strategy: NOT_NULL
+      update-strategy: NOT_NULL
+      select-strategy: NOT_NULL
+    # 关闭banner
+    banner: false
+  # 配置
+  configuration:
+    # 开启驼峰命名
+    map-underscore-to-camel-case: true
+    # 开启 MyBatis 二级缓存
+    cache-enabled: false
+    # 配置 JdbcTypeForNull
+    jdbc-type-for-null: NULL
+    # 打印 SQL（开发环境）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# JWT配置
+jwt:
+  secret: valorant-platform-secret-key-2024-very-long-secret
+  expiration: 86400000 # 24小时
+  refresh-expiration: 604800000 # 7天
+
+# 阿里云OSS配置（稍后配置）
+aliyun:
+  oss:
+    enabled: false  # 开发环境设为false
+    endpoint: https://oss-cn-hangzhou.aliyuncs.com
+    access-key-id: your_access_key_id
+    access-key-secret: your_access_key_secret
+    bucket-name: your_bucket_name
+
+# 自定义配置
+app:
+  # 缓存配置
+  cache:
+    user-session-timeout: 1800 # 30分钟
+    basic-data-timeout: 7200 # 2小时
+    search-result-timeout: 900 # 15分钟
+
+  # 视频配置
+  video:
+    upload-path: /uploads/videos/
+    thumbnail-path: /uploads/thumbnails/
+    allowed-formats: mp4,avi,mov,wmv
+    max-size: 104857600 # 100MB
+
+  storage:
+      # 存储类型：local（本地）或 oss（阿里云）
+      type: local
+
+      # 本地存储配置
+      local:
+        # 本地存储基础路径
+        base-path: ./uploads
+        # 访问URL前缀
+#        base-url: http://localhost:8080/api/files
+        base-url: /api/files
+        # 临时Token密钥
+        temp-token-secret: valorant-local-secret-key-2025
+
+# 日志配置
+logging:
+  level:
+    com.escape: debug
+    org.springframework.security: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/valorant-platform.log
+    max-size: 10MB
+    max-history: 30
