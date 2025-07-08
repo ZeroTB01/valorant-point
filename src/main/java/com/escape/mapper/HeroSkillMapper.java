@@ -2,10 +2,7 @@ package com.escape.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.escape.entity.HeroSkill;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -57,4 +54,10 @@ public interface HeroSkillMapper extends BaseMapper<HeroSkill> {
     @Update("UPDATE hero_skills SET tips = #{tips}, " +
             "update_time = NOW() WHERE id = #{id}")
     int updateTips(@Param("id") Long id, @Param("tips") String tips);
+
+    /**
+     * 删除应英雄技能
+     */
+    @Delete("DELETE FROM hero_skills WHERE hero_id = #{heroId}")
+    int deleteByHeroId(@Param("heroId") Long heroId);
 }

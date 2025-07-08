@@ -21,14 +21,11 @@ public class JacksonConfig {
 
     @PostConstruct
     public void configureObjectMapper() {
-        System.out.println("🔧 强制配置Jackson ObjectMapper...");
-
         // 注册JavaTimeModule
         objectMapper.registerModule(new JavaTimeModule());
 
         // 禁用时间戳格式
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        System.out.println("✅ Jackson ObjectMapper配置完成！");
     }
 }

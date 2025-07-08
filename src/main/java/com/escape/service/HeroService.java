@@ -106,4 +106,12 @@ public interface HeroService extends IService<Hero> {
      * 刷新英雄缓存
      */
     void refreshHeroCache();
+
+
+    /**
+     * 更新英雄信息
+     * @param hero 英雄信息
+     * @param token 令牌
+     */
+    void updateHero(Hero hero, String token);
 }

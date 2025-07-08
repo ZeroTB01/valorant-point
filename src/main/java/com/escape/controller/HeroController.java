@@ -7,6 +7,7 @@ import com.escape.common.ResultCode;
 import com.escape.entity.Hero;
 import com.escape.entity.HeroSkill;
 import com.escape.service.HeroService;
+import com.escape.service.HeroSkillService;
 import com.escape.utils.JwtUtils;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,8 @@ public class HeroController {
 
     @Autowired
     private HeroService heroService;
+    @Autowired
+    private HeroSkillService heroSkillService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -366,6 +369,45 @@ public class HeroController {
             return Result.error(ResultCode.BAD_REQUEST.getCode(), message);
         } else {
             return Result.error(ResultCode.BAD_REQUEST.getCode(), message);
+        }
+    }
+
+    /**
+     * 更新英雄信息
+     */
+    @PutMapping("/{heroId}")
+    public Result<String> updateHero(
+    @PathVariable Long heroId,
+    @RequestBody Hero hero,
+    @RequestHeader("Authorization") String token
+) {
+    hero.setId(heroId); // 保证ID一致
+    heroService.updateHero(hero, token);
+    return Result.success("修改成功");
+}
+
+    /**
+     * 更新英雄技能
+     * @param heroId
+     * @param skills
+     * @param token
+     * @return
+     */
+    @PostMapping("/{heroId}/skills")
+    public Result<String> saveHeroSkills(
+            @PathVariable Long heroId,
+            @RequestBody List<HeroSkill> skills,
+            @RequestHeader("Authorization") String token) {
+        try {
+            log.info("保存技能 heroId={}, skills={}", heroId, skills);
+            Long currentUserId = getUserIdFromToken(token);
+            validateAdminPermission(currentUserId);
+
+            heroSkillService.saveOrUpdateHeroSkills(heroId, skills);
+            return Result.success("技能保存成功");
+        } catch (Exception e) {
+            log.error("保存英雄技能系统错误: heroId={}, skills={}, error={}", heroId, skills, e.getMessage(), e);
+            return Result.error(ResultCode.INTERNAL_SERVER_ERROR);
         }
     }
 }

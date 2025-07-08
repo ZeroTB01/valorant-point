@@ -300,6 +300,25 @@ public class HeroServiceImpl extends ServiceImpl<HeroMapper, Hero> implements He
         redisUtils.delete(redisUtils.keys(HERO_CACHE_PREFIX + "*"));
     }
 
+
+    /**更新英雄字段内容
+     *
+     * @param hero 英雄信息
+     * @param token 令牌
+     */
+    @Override
+    public void updateHero(Hero hero, String token) {
+        // 可加权限校验
+        if (hero.getId() == null) {
+            throw new BusinessException(ResultCode.BAD_REQUEST.getCode(), "英雄ID不能为空");
+        }
+        // 只更新非null字段
+        boolean success = this.updateById(hero);
+        if (!success) {
+            throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "英雄不存在");
+        }
+    }
+
     /**
      * 验证英雄类型是否合法
      */
