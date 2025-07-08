@@ -213,15 +213,17 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, Content> impl
     @Override
     public IPage<Content> getContentPage(Page<Content> page, Map<String, Object> params) {
         QueryWrapper<Content> wrapper = new QueryWrapper<>();
-        wrapper.eq("deleted", 0).eq("status", 1);
+        wrapper.eq("deleted", 0);
 
-        // 处理查询参数
         if (params != null) {
+            Object status = params.get("status");
+            if (status != null) {
+                wrapper.eq("status", status);
+            }
             Object contentType = params.get("contentType");
             if (contentType != null && StringUtils.hasText(contentType.toString())) {
                 wrapper.eq("content_type", contentType);
             }
-
             Object isFeatured = params.get("isFeatured");
             if (isFeatured != null) {
                 wrapper.eq("is_featured", isFeatured);

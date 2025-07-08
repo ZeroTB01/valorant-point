@@ -193,6 +193,7 @@ public class ContentController {
     public Result<IPage<Content>> getContentPage(@RequestParam(defaultValue = "1") Integer current,
                                                  @RequestParam(defaultValue = "10") Integer size,
                                                  @RequestParam(required = false) String contentType,
+                                                 @RequestParam(required = false) Integer status,
                                                  @RequestParam(required = false) Boolean isFeatured,
                                                  @RequestParam(required = false) Boolean isOfficial,
                                                  @RequestParam(required = false) Long authorId,
@@ -203,6 +204,7 @@ public class ContentController {
 
             Map<String, Object> params = new HashMap<>();
             if (contentType != null) params.put("contentType", contentType);
+            if (status != null) params.put("status", status);
             if (isFeatured != null) params.put("isFeatured", isFeatured ? 1 : 0);
             if (isOfficial != null) params.put("isOfficial", isOfficial ? 1 : 0);
             if (authorId != null) params.put("authorId", authorId);
